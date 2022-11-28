@@ -1,12 +1,3 @@
-/* *******************************************************************************************
- *                                                                                           *
- * Please read the following tutorial before implementing tasks:                              *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Numbers_and_dates#Date_object
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date     *
- *                                                                                           *
- ******************************************************************************************* */
-
-
 /**
  * Parses a rfc2822 string date representation into date value
  * For rfc2822 date specification refer to : http://tools.ietf.org/html/rfc2822#page-14
@@ -19,8 +10,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return Date.parse(value);
 }
 
 /**
@@ -34,8 +25,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return Date.parse(value);
 }
 
 
@@ -53,8 +44,9 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
 }
 
 
@@ -73,8 +65,14 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const difference = Math.abs(endDate - startDate);
+  const hour = String(Math.floor(difference / 3600000));
+  const minutes = String(Math.floor((difference - hour * 3600000) / 60000));
+  const seconds = String(Math.floor((difference - hour * 3600000 - minutes * 60000) / 1000));
+  const milliseconds = String(Math.floor(difference
+    - hour * 3600000 - minutes * 60000 - seconds * 1000));
+  return `${hour.padStart(2, 0)}:${minutes.padStart(2, 0)}:${seconds.padStart(2, 0)}.${milliseconds.padStart(3, 0)}`;
 }
 
 
@@ -94,8 +92,22 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+  const normHours = hours > 12 ? hours - 12 : hours;
+  const clockMinutes = minutes !== 0 ? 60 / minutes : 0;
+  if (normHours === 0 && clockMinutes === 0) {
+    return 0.0;
+  }
+  if (normHours === 12 && clockMinutes === 0) {
+    return 0.0;
+  }
+  const hourAngle = 0.5 * (normHours * 60 + minutes);
+  const minuteAngle = 6 * minutes;
+  let angle = Math.abs(hourAngle - minuteAngle);
+  angle = Math.min(360 - angle, angle);
+  return (Math.PI * angle) / 180;
 }
 
 
