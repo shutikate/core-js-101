@@ -1,11 +1,3 @@
-/* ************************************************************************************************
- *                                                                                                *
- * Please read the following tutorial before implementing tasks:                                   *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise       *
- *                                                                                                *
- ************************************************************************************************ */
-
-
 /**
  * Return Promise object that is resolved with string value === 'Hooray!!! She said "Yes"!',
  * if boolean value === true is passed, resolved with string value === 'Oh no, she said "No".',
@@ -28,8 +20,21 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPositiveAnswer) {
+  const promise = new Promise((resolve, reject) => {
+    if (typeof isPositiveAnswer !== 'boolean') {
+      reject();
+    }
+    resolve(isPositiveAnswer);
+  });
+  promise
+    .then((answer) => {
+      if (answer) {
+        return 'Hooray!!! She said "Yes"!';
+      }
+      return 'Oh no, she said "No".';
+    })
+    .catch(() => 'Wrong parameter is passed!Ask her again.');
 }
 
 
