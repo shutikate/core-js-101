@@ -103,43 +103,58 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
-class MyCssElements {
-  constructor(value) {
-    this.value = value;
-  }
+// class MyCssElements {
+//   constructor(value) {
+//     this.value = value;
+//   }
 
-  stringify() {
-    return this.value;
-  }
-}
+//   stringify() {
+//     return this.value;
+//   }
+// }
 
 const cssSelectorBuilder = {
+  value: '',
+
   element(value) {
-    return new MyCssElements(value);
+    this.value += value;
+    return this;
   },
 
   id(value) {
-    return new MyCssElements(`#${value}`);
+    this.value += `#${value}`;
+    return this;
   },
 
   class(value) {
-    return new MyCssElements(`.${value}`);
+    this.value += `.${value}`;
+    return this;
   },
 
   attr(value) {
-    return new MyCssElements(`[${value}]`);
+    this.value += `[${value}]`;
+    return this;
   },
 
   pseudoClass(value) {
-    return new MyCssElements(`:${value}`);
+    this.value += `:${value}`;
+    return this;
   },
 
   pseudoElement(value) {
-    return new MyCssElements(`::${value}`);
+    this.value += `::${value}`;
+    return this;
   },
 
   combine(selector1, combinator, selector2) {
-    return new MyCssElements(`${selector1}${combinator}${selector2}`);
+    this.value += `${selector1}${combinator}${selector2}`;
+    return this;
+  },
+
+  stringify() {
+    const result = this.value;
+    this.value = '';
+    return result;
   },
 };
 

@@ -21,20 +21,12 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (typeof isPositiveAnswer !== 'boolean') {
-      reject();
+      reject(new Error('Wrong parameter is passed! Ask her again.'));
     }
-    resolve(isPositiveAnswer);
+    resolve(isPositiveAnswer ? 'Hooray!!! She said "Yes"!' : 'Oh no, she said "No".');
   });
-  promise
-    .then((answer) => {
-      if (answer) {
-        return 'Hooray!!! She said "Yes"!';
-      }
-      return 'Oh no, she said "No".';
-    })
-    .catch(() => 'Wrong parameter is passed!Ask her again.');
 }
 
 
@@ -53,8 +45,8 @@ function willYouMarryMe(isPositiveAnswer) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return Promise.all(array);
 }
 
 /**
@@ -76,8 +68,8 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  return Promise.race(array);
 }
 
 /**
@@ -97,9 +89,38 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  // const res = [];
+  // for await (const num of array) {
+  //   res.push(num);
+  // }
+  // return res.reduce(action);
+  // array.forEach(async (promise) => {
+  //   const item = await promise;
+  //   res.push(item);
+  //   console.log(res);
+  // });
+  // console.log(res);
+  // return res.reduce(action);
+
+
+  // const data = array.reduce((acc, curr) => acc.then(curr), Promise.resolve());
+  // console.log(data);
+
+  // return data;
+
+  const res = [];
+  for (let i = 0; i < array.length; i += 1) {
+    try {
+      array[i].then(async (value) => res.push(await value));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  return res.reduce(action);
 }
+
 
 module.exports = {
   willYouMarryMe,

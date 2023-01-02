@@ -387,10 +387,20 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let result = '';
+  const arr = [];
+  pathes.forEach((path) => arr.push(path.split('/')));
+  for (let j = 0; j < arr[0].length; j += 1) {
+    for (let i = 1; i < arr.length; i += 1) {
+      if (arr[0][j] !== arr[i][j]) {
+        return result;
+      }
+    }
+    result += `${arr[0][j]}/`;
+  }
+  return result;
 }
-
 
 /**
  * Returns the product of two specified matrixes.
